@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\zzzLaura\\prlaura\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9F0EC142-DB56-4C7E-A7A1-EA6D2DD4244F}|prlaura.pyproj|C:\\zzzLaura\\prlaura\\prlaura.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{9F0EC142-DB56-4C7E-A7A1-EA6D2DD4244F}|prlaura.pyproj|solutionrelative:prlaura.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "prlaura.py",
+              "DocumentMoniker": "C:\\zzzLaura\\prlaura\\prlaura.py",
+              "RelativeDocumentMoniker": "prlaura.py",
+              "ToolTip": "C:\\zzzLaura\\prlaura\\prlaura.py",
+              "RelativeToolTip": "prlaura.py",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAAEAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2025-05-23T21:10:14.877Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
