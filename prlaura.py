@@ -90,15 +90,22 @@ def confirmacion_guardado():
 
             #insertar cada producto en la tabla venta_producto
             cursor.execute("INSERT INTO venta_producto (ID_venta, ID_producto, cantidad, precio) VALUES (%s, %s, %s, %s)",(id_venta, id_producto, cantidad, precio))
+            reducir_stock(cantidad, id_producto)
         conn.commit()
         limpiar_grid()
         caja_nombre_cliente.delete(0, tk.END)
+
+def reducir_stock(cantidad, id):
+    cursor.execute("UPDATE stock SET stock = stock - %s where ID_producto = %s;",(cantidad, id))
+
 
 def limpiar_grid():
    if tabla_treeview.get_children(): #Verifica que haya elementos antes de borrar
     for item in tabla_treeview.get_children():
             tabla_treeview.delete(item)
     calcular_total()
+
+#FUNCIONES DE BARRA MENU
 
 if conn:
     print("Conexion con exito")
@@ -109,6 +116,20 @@ else:
 ventana_pricipal = tk.Tk()
 ventana_pricipal.title("New TOMAS Kiosco")
 ventana_pricipal.config(width=900, height=2000)
+
+# Crear barra de menú
+barra_menu = tk.Menu(ventana_pricipal)
+ventana_pricipal.config(menu=barra_menu)
+# Menú de acciones
+menu_opciones = tk.Menu(barra_menu, tearoff=0)
+barra_menu.add_cascade(label="Opciones", menu=menu_opciones)
+
+# menu_opciones.add_command(label="Agregar Producto", command=abrir_agregar_producto)
+# menu_opciones.add_command(label="Agregar Stock", command=abrir_agregar_stock)
+# menu_opciones.add_separator()
+# menu_opciones.add_command(label="Salir", command=root.quit)
+
+
 
 #Ingreso de codigo de barra
 caja_ingreso_codigo = tk.Entry()
