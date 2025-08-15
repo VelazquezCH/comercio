@@ -5,14 +5,6 @@ from tkinter import ttk,messagebox
 
 
 
-# def guardar_venta(treeview, nombre_cliente, label_total):
-#     conn = obtener_conexion()
-#     cursor = conn.cursor()
-#     # lógica de inserción
-#     conn.commit()
-#     conn.close()
-
-
 def confirmacion_guardado(tabla_treeview, caja_nombre_cliente, label_total):
     conn = obtener_conexion()
     cursor = conn.cursor()
