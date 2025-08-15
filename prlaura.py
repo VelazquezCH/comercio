@@ -6,6 +6,8 @@ import os
 import tkinter as tk
 from tkinter import ttk,messagebox
 from ventas import format_currency, calcular_total, limpiar_grid, confirmacion_guardado
+from stock_ui import ventana_agregar_stock_varios
+from estadistica import estadistica
 
 
 conn = mysql.connector.connect(
@@ -84,7 +86,8 @@ menu_opciones = tk.Menu(barra_menu, tearoff=0)
 barra_menu.add_cascade(label="Opciones", menu=menu_opciones)
 
 # menu_opciones.add_command(label="Agregar Producto", command=abrir_agregar_producto)
-# menu_opciones.add_command(label="Agregar Stock", command=abrir_agregar_stock)
+menu_opciones.add_command(label="Agregar Stock", command=ventana_agregar_stock_varios)
+menu_opciones.add_command(label="Estadistica", command=estadistica)
 # menu_opciones.add_separator()
 # menu_opciones.add_command(label="Salir", command=root.quit)
 
