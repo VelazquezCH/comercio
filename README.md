@@ -141,6 +141,14 @@ GROUP BY vp.ID_producto, p.nombre;
 ## 🧬 Comandos Git recomendados
 
 ```bash
+#Usá este comando para comparar el archivo actual con la última versión confirmada (commit):
+git diff README.md
+
+# Pasa saber que rama estoy
+git remote -v
+git branch
+git log --oneline -n 5
+
 # Guardar cambios
 git add archivo
 git commit -m "Mensaje breve"
@@ -159,17 +167,6 @@ git stash pop
 # Descartar cambios (⚠️ cuidado)
 git restore README.md notas.txt
 git checkout main
-
-#traer un archivo del main
-
-git checkout main -- .gitignore
 ```
 
 ---
-
-
-
-
-
-
-
