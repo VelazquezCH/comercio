@@ -159,6 +159,10 @@ git stash pop
 # Descartar cambios (⚠️ cuidado)
 git restore README.md notas.txt
 git checkout main
+
+#traer un archivo del main
+
+git checkout main -- .gitignore
 ```
 
 ---

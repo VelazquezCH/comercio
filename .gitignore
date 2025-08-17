@@ -1,0 +1,37 @@
+# Ignorar cachés de Python
+__pycache__/
+*.pyc
+
+# Configuración de editores
+.vscode/
+.idea/
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Archivos sensibles o de entorno
+.env
+
+# Archivos PDF generados
+*.pdf
+
+notas.txt
+
+# Ignorar backups o archivos intermedios
+*.bak
+*.old
+
+# Ignorar capturas de pantalla si no las querés subir
+img/*.png
+img/*.jpg
+
+
+# Ignorar archivos de base de datos locales (si usás SQLite en pruebas)
+*.db
+*.sqlite3
+
+
+
+
+
