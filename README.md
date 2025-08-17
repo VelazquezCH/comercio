@@ -1,190 +1,167 @@
-# Laura - Sistema de Gestión para Kiosco
 
-Laura es una aplicación de escritorio desarrollada en Python con Tkinter y MySQL para gestionar ventas, productos y stock de un kiosco. Incluye funciones como lectura de códigos de barra, actualización automática de inventario, cálculo total y almacenamiento de transacciones.
 
-## Características
+```markdown
+# 💼 Laura - Sistema de Gestión para Kiosco
+
+Laura es una aplicación de escritorio desarrollada en Python con Tkinter y MySQL para gestionar ventas, productos y stock de un kiosco. Incluye lectura de códigos de barra, actualización automática de inventario, cálculo total y almacenamiento de transacciones.
+
+---
+
+## 🚀 Características
 
 - Registro de ventas con fecha y total.
-- Control de stock automático al vender o reponer.
-- Interfaz gráfica intuitiva con Tkinter.
-- Generación de tickets o reportes (próximamente con FPDF).
-- Modularización del código para facilidad de mantenimiento.
+- Control automático de stock.
+- Interfaz gráfica con Tkinter.
+- Generación de tickets (próximamente con FPDF).
+- Código modular para mantenimiento.
 
-##  Requisitos
+---
+
+## 🧰 Requisitos
 
 - Python 3.x
 - MySQL Server
 - Librerías:
   - `mysql-connector-python`
-  - `tkinter` (incluido en la mayoría de distribuciones Python)
+  - `tkcalendar`
+  - `tkinter` (incluido en Python)
 
-##  Instalación
+---
 
-1. Cloná el repositorio:
-   """bash
-   git clone https://github.com/VelazquezCH/comercio.git
-   cd comercio"""
+## 🛠️ Instalación
 
+```bash
+git clone https://github.com/VelazquezCH/comercio.git
+cd comercio
+```
 
-## Configurá la base de datos MySQL:
-- Crear la base de datos laura
-- Crear las tablas necesarias (productos, stock, ventas, venta_producto)
-- Cargar datos de prueba si es necesario
-    use laura;
+---
 
-    create table ventas( 
-        ID_venta int auto_increment primary key,
-        nombre varchar(100),
-        fecha datetime,
-        total float);
-        
-    create table stock(
-        ID_producto int,
-        stock int,
-        foreign key (ID_producto) references productos(ID_producto));    
-        
-    create table movimineto_stock(
-        ID_producto int,
-        fecha datetime,
-        cantidad int,
-        foreign key (ID_producto) references productos(ID_producto));
-        
-    create table venta_producto(
-        ID_venta int,
-        ID_producto int,
-        cantidad int,
-        precio float,
-        foreign key(ID_venta) references ventas(ID_venta),
-        foreign key (ID_producto) references productos(ID_producto));
+## 🗄️ Configuración de la base de datos
 
-    create table productos( 
-        ID_producto int auto_increment primary key,
-        codigo int,
-        nombre varchar (100),
-        precio float);
+```sql
+CREATE DATABASE laura;
+USE laura;
 
+CREATE TABLE productos (
+  ID_producto INT AUTO_INCREMENT PRIMARY KEY,
+  codigo INT,
+  nombre VARCHAR(100),
+  precio FLOAT
+);
 
-## Comandos git
+CREATE TABLE ventas (
+  ID_venta INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100),
+  fecha DATETIME,
+  total FLOAT
+);
 
-git add<file>
-git commit -m "..."(Algo breve)
-git push origin main
+CREATE TABLE stock (
+  ID_producto INT,
+  stock INT,
+  FOREIGN KEY (ID_producto) REFERENCES productos(ID_producto)
+);
 
-## ¿Qué hace cada parte?🧠
+CREATE TABLE movimiento_stock (
+  ID_producto INT,
+  fecha DATETIME,
+  cantidad INT,
+  FOREIGN KEY (ID_producto) REFERENCES productos(ID_producto)
+);
 
-- yscrollcommand=scroll_y.set → conecta el scroll vertical
-- xscrollcommand=scroll_x.set → conecta el scroll horizontal
-- scroll_y.config(command=tabla.yview) → activa el movimiento
-- pack(side=RIGHT) y pack(side=BOTTOM) → colocan los scrolls al costado y abajo
+CREATE TABLE venta_producto (
+  ID_venta INT,
+  ID_producto INT,
+  cantidad INT,
+  precio FLOAT,
+  FOREIGN KEY (ID_venta) REFERENCES ventas(ID_venta),
+  FOREIGN KEY (ID_producto) REFERENCES productos(ID_producto)
+);
+```
 
+---
 
+## 👤 Autor
 
+**Cristian Velázquez**  
+Entusiasta de Python y creador de soluciones prácticas para el mundo real.
 
+---
 
+## 🧠 Apuntes técnicos (útiles para desarrolladores)
 
+### Tkinter: Scroll y Layouts
 
-🗓️ 1. DateEntry de tkcalendar
-Este es el más usado en Tkinter. Permite seleccionar fechas desde un calendario desplegable.
-🔧 Instalación:
+| Comando | Descripción |
+|--------|-------------|
+| `yscrollcommand=scroll_y.set` | Conecta el scroll vertical |
+| `xscrollcommand=scroll_x.set` | Conecta el scroll horizontal |
+| `scroll_y.config(command=tabla.yview)` | Activa el movimiento |
+| `pack(side=RIGHT)` | Coloca el scroll a la derecha |
+| `pack(side=BOTTOM)` | Coloca el scroll abajo |
+
+### ¿Qué es un Frame?
+
+Un `Frame` es un contenedor que organiza widgets. Podés usar `pack()` en un Frame y `grid()` en otro para evitar conflictos.
+
+---
+
+### 📅 Tkcalendar: DateEntry
+
+```bash
 pip install tkcalendar
+```
 
-
-🧪 Ejemplo básico:
+```python
 from tkinter import Tk
 from tkcalendar import DateEntry
 
 root = Tk()
-fecha_inicio = DateEntry(root, width=12, background='darkblue',
-                         foreground='white', borderwidth=2, year=2025)
-fecha_inicio.pack(padx=10, pady=10)
-
+fecha_inicio = DateEntry(root, year=2025)
+fecha_inicio.pack()
 root.mainloop()
+```
 
+---
 
-Podés acceder al valor con fecha_inicio.get().
-## ¿que es un Frame?
+## 🧪 Consultas SQL útiles
 
-    Un Frame es una caja contenedora dentro de una ventana. Sirve
-para organizar widgets en grupos separados.
-    Podes tener varios Frames en una misma ventana y cada uno puede tener 
-su prodio sistema LAYOUT.
-    LAYOUTS  es una forma de organizar y posicionar los widgets.
+```sql
+SELECT p.nombre AS nombre_producto, SUM(vp.cantidad) AS total_vendido
+FROM venta_producto vp
+JOIN ventas v ON vp.ID_venta = v.ID_venta
+JOIN productos p ON vp.ID_producto = p.ID_producto
+WHERE v.fecha BETWEEN '2025-01-01' AND '2025-08-30'
+GROUP BY vp.ID_producto, p.nombre;
+```
 
-## ¿Por qué no se puede mezclar pack() y grid()?
+---
 
-    Tkinter no permite usar pack() y gridd() en el mismo contenedor.
-## ¿Cómo se soluciona?
+## 🧬 Comandos Git recomendados
 
-    Usando Frame como separador. Usando 
-    -un Frame dende usas pack()
-    -otro Frame donde usas grid() 
+```bash
+# Guardar cambios
+git add archivo
+git commit -m "Mensaje breve"
+git push origin desarrolloCristian
 
+# Fusionar al main
+git checkout main
+git merge desarrolloCristian
+git push origin main
 
-## ✍️ Autor 
-Cristian Velázquez  
-Entusiasta de Python y creador de soluciones prácticas para el mundo real.
+# Guardar temporalmente
+git stash
+git checkout main
+git stash pop
 
- Consulta: productos vendidos entre dos fechas
-SELECT 
-    p.nombre AS nombre_producto,
-    SUM(vp.cantidad) AS total_vendido
-FROM 
-    venta_producto vp
-JOIN 
-    ventas v ON vp.ID_venta = v.ID_venta
-JOIN 
-    productos p ON vp.ID_producto = p.ID_producto
-WHERE 
-    v.fecha BETWEEN '2025-01-01' AND '2025-08-30'
-GROUP BY 
-    vp.ID_producto, p.nombre;
+# Descartar cambios (⚠️ cuidado)
+git restore README.md notas.txt
+git checkout main
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-SELECT 
-    p.nombre_producto,
-    SUM(v.cantidad_vendida) AS total_vendido
-FROM 
-    ventas v
-JOIN 
-    productos p ON v.producto_id = p.id
-WHERE 
-    v.fecha_venta BETWEEN '2025-08-01' AND '2025-08-10'
-GROUP BY 
-    p.nombre_producto;
-
-
-
-
-
-SELECT 
-    producto_id,
-    SUM(cantidad_vendida) AS total_vendido
-FROM 
-    ventas
-WHERE 
-    fecha_venta BETWEEN '2025-08-01' AND '2025-08-10'
-GROUP BY 
-    producto_id;
-
-
-
-
-
+---
 
 
 
