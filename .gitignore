@@ -17,3 +17,21 @@ __pycache__/
 *.pdf
 
 notas.txt
+
+# Ignorar backups o archivos intermedios
+*.bak
+*.old
+
+# Ignorar capturas de pantalla si no las querés subir
+img/*.png
+img/*.jpg
+
+
+# Ignorar archivos de base de datos locales (si usás SQLite en pruebas)
+*.db
+*.sqlite3
+
+
+
+
+
