@@ -5,6 +5,9 @@ import sys
 import os
 import tkinter as tk
 from tkinter import ttk,messagebox
+from ventas import format_currency, calcular_total, limpiar_grid, confirmacion_guardado
+from stock_ui import ventana_agregar_stock_varios
+from estadistica import estadistica
 
 
 conn = mysql.connector.connect(
@@ -16,25 +19,8 @@ conn = mysql.connector.connect(
         )
 cursor = conn.cursor()
 
-def carga_tabla_venta():
-        pass
-
-def format_currency(value):
-    try:
-        return f"$ {float(value):,.2f}"  # Permite decimales con dos dígitos
-    except ValueError:
-        return value
-    
-def calcular_total():
-    total_compra = 0
-    #Recorrer toas las filas de Treeview
-    for item in tabla_treeview.get_children():
-        valores = tabla_treeview.item(item, "values")#obtener valores de la fila
-        valor_grid3 = valores[4]
-        valor_grid3 = float(valor_grid3.replace("$","").replace(",","").strip())
-        total_compra += valor_grid3
-    label_total.config(text=f"Total: ${total_compra:,.2f}")
-    return total_compra
+def guardar():
+    confirmacion_guardado(tabla_treeview,caja_nombre_cliente, label_total)
 
 
 def consulta_producto(event=None):
@@ -53,9 +39,8 @@ def consulta_producto(event=None):
         tabla_treeview.insert("", tk.END, values=(id_producto, nombre, precio, cantidad,format_currency(total)))
         caja_ingreso_codigo.delete(0,tk.END)   
         caja_ingreso_cantidad.delete(0,tk.END)
-        caja_ingreso_cantidad.insert(0,1)         
-        calcular_total()
-        
+        caja_ingreso_cantidad.insert(0,1)
+        mostrar_total()
     else:
          messagebox.showerror("Error", "Producto no encontrado.") 
     
@@ -68,42 +53,18 @@ def borrar_select():
         if respuesta:  # Solo borra si el usuario presiona "Sí"
             for item in seleccionados:
                 tabla_treeview.delete(item)
-            calcular_total()  # Actualizar el total después de eliminar
+            mostrar_total(tabla_treeview, label_total) # Actualizar el total después de eliminar
     except ValueError:
         messagebox.showwarning(title="Aviso", message="Selecciona un elemento para borrar.")
 
-def confirmacion_guardado():
-    if tabla_treeview.get_children():
-        fecha_hora = datetime.now()
-        total = calcular_total()
-        nombre = caja_nombre_cliente.get()
-        cursor.execute("INSERT INTO ventas (nombre, fecha, total) VALUES( %s, %s, %s)",(nombre, fecha_hora,total))
-        cursor.execute("SELECT LAST_INSERT_ID();")
-        id_venta = cursor.fetchone()[0]
 
-        #Recorrer el grid para tener los valores/productos
-        for row in tabla_treeview.get_children():
-            values = tabla_treeview.item(row, "values") #Obtener los valores de la fila
-            id_producto = values[0]
-            precio = values[2]
-            cantidad = values[3]
-
-            #insertar cada producto en la tabla venta_producto
-            cursor.execute("INSERT INTO venta_producto (ID_venta, ID_producto, cantidad, precio) VALUES (%s, %s, %s, %s)",(id_venta, id_producto, cantidad, precio))
-            reducir_stock(cantidad, id_producto)
-        conn.commit()
-        limpiar_grid()
-        caja_nombre_cliente.delete(0, tk.END)
-
-def reducir_stock(cantidad, id):
-    cursor.execute("UPDATE stock SET stock = stock - %s where ID_producto = %s;",(cantidad, id))
+def mostrar_total():
+    total = calcular_total(tabla_treeview, label_total)
+    label_total.config(text=f"Total: ${total:,.2f}")
 
 
-def limpiar_grid():
-   if tabla_treeview.get_children(): #Verifica que haya elementos antes de borrar
-    for item in tabla_treeview.get_children():
-            tabla_treeview.delete(item)
-    calcular_total()
+
+    
 
 #FUNCIONES DE BARRA MENU
 
@@ -125,7 +86,8 @@ menu_opciones = tk.Menu(barra_menu, tearoff=0)
 barra_menu.add_cascade(label="Opciones", menu=menu_opciones)
 
 # menu_opciones.add_command(label="Agregar Producto", command=abrir_agregar_producto)
-# menu_opciones.add_command(label="Agregar Stock", command=abrir_agregar_stock)
+menu_opciones.add_command(label="Agregar Stock", command=ventana_agregar_stock_varios)
+menu_opciones.add_command(label="Estadistica", command=estadistica)
 # menu_opciones.add_separator()
 # menu_opciones.add_command(label="Salir", command=root.quit)
 
@@ -164,7 +126,7 @@ boton_consulta.place(x=300, y=55)
 boton_quitar = tk.Button(text="Quitar", command=borrar_select)
 boton_quitar.place(x=400, y=55)
 
-boton_confirmar_venta = tk.Button(text="Confirmar", command=confirmacion_guardado)
+boton_confirmar_venta = tk.Button(text="Confirmar", command=guardar)
 boton_confirmar_venta.place(x=480, y=55)
 
 #Grid
