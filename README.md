@@ -1,74 +1,178 @@
-# Laura - Sistema de Gestión para Kiosco
 
-Laura es una aplicación de escritorio desarrollada en Python con Tkinter y MySQL para gestionar ventas, productos y stock de un kiosco. Incluye funciones como lectura de códigos de barra, actualización automática de inventario, cálculo total y almacenamiento de transacciones.
 
-## Características
+```markdown
+# 💼 Laura - Sistema de Gestión para Kiosco
+
+Laura es una aplicación de escritorio desarrollada en Python con Tkinter y MySQL para gestionar ventas, productos y stock de un kiosco. Incluye lectura de códigos de barra, actualización automática de inventario, cálculo total y almacenamiento de transacciones.
+
+---
+
+## 🚀 Características
 
 - Registro de ventas con fecha y total.
-- Control de stock automático al vender o reponer.
-- Interfaz gráfica intuitiva con Tkinter.
-- Generación de tickets o reportes (próximamente con FPDF).
-- Modularización del código para facilidad de mantenimiento.
+- Control automático de stock.
+- Interfaz gráfica con Tkinter.
+- Generación de tickets (próximamente con FPDF).
+- Código modular para mantenimiento.
 
-##  Requisitos
+---
+
+## 🧰 Requisitos
 
 - Python 3.x
 - MySQL Server
 - Librerías:
   - `mysql-connector-python`
-  - `tkinter` (incluido en la mayoría de distribuciones Python)
+  - `tkcalendar`
+  - `tkinter` (incluido en Python)
 
-##  Instalación
+---
 
-1. Cloná el repositorio:
-   """bash
-   git clone https://github.com/VelazquezCH/comercio.git
-   cd comercio"""
+## 🛠️ Instalación
+
+```bash
+git clone https://github.com/VelazquezCH/comercio.git
+cd comercio
+```
+
+---
+
+## 🗄️ Configuración de la base de datos
+
+```sql
+CREATE DATABASE laura;
+USE laura;
+
+CREATE TABLE productos (
+  ID_producto INT AUTO_INCREMENT PRIMARY KEY,
+  codigo INT,
+  nombre VARCHAR(100),
+  precio FLOAT
+);
+
+CREATE TABLE ventas (
+  ID_venta INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100),
+  fecha DATETIME,
+  total FLOAT
+);
+
+CREATE TABLE stock (
+  ID_producto INT,
+  stock INT,
+  FOREIGN KEY (ID_producto) REFERENCES productos(ID_producto)
+);
+
+CREATE TABLE movimiento_stock (
+  ID_producto INT,
+  fecha DATETIME,
+  cantidad INT,
+  FOREIGN KEY (ID_producto) REFERENCES productos(ID_producto)
+);
+
+CREATE TABLE venta_producto (
+  ID_venta INT,
+  ID_producto INT,
+  cantidad INT,
+  precio FLOAT,
+  FOREIGN KEY (ID_venta) REFERENCES ventas(ID_venta),
+  FOREIGN KEY (ID_producto) REFERENCES productos(ID_producto)
+);
+```
+
+---
+
+## 👤 Autor
+
+**Cristian Velázquez**  
+Entusiasta de Python y creador de soluciones prácticas para el mundo real.
+
+---
+
+## 🧠 Apuntes técnicos (útiles para desarrolladores)
+
+### Tkinter: Scroll y Layouts
+
+| Comando | Descripción |
+|--------|-------------|
+| `yscrollcommand=scroll_y.set` | Conecta el scroll vertical |
+| `xscrollcommand=scroll_x.set` | Conecta el scroll horizontal |
+| `scroll_y.config(command=tabla.yview)` | Activa el movimiento |
+| `pack(side=RIGHT)` | Coloca el scroll a la derecha |
+| `pack(side=BOTTOM)` | Coloca el scroll abajo |
+
+### ¿Qué es un Frame?
+
+Un `Frame` es un contenedor que organiza widgets. Podés usar `pack()` en un Frame y `grid()` en otro para evitar conflictos.
+
+---
+
+### 📅 Tkcalendar: DateEntry
+
+```bash
+pip install tkcalendar
+```
+
+```python
+from tkinter import Tk
+from tkcalendar import DateEntry
+
+root = Tk()
+fecha_inicio = DateEntry(root, year=2025)
+fecha_inicio.pack()
+root.mainloop()
+```
+
+---
+
+## 🧪 Consultas SQL útiles
+
+```sql
+SELECT p.nombre AS nombre_producto, SUM(vp.cantidad) AS total_vendido
+FROM venta_producto vp
+JOIN ventas v ON vp.ID_venta = v.ID_venta
+JOIN productos p ON vp.ID_producto = p.ID_producto
+WHERE v.fecha BETWEEN '2025-01-01' AND '2025-08-30'
+GROUP BY vp.ID_producto, p.nombre;
+```
+
+---
+
+## 🧬 Comandos Git recomendados
+
+```bash
+#Ver los cambios en README.md
+----Usá este comando para comparar el archivo actual con la última versión confirmada (commit):
+git diff README.md
 
 
-## Configurá la base de datos MySQL:
-- Crear la base de datos laura
-- Crear las tablas necesarias (productos, stock, ventas, venta_producto)
-- Cargar datos de prueba si es necesario
-    use laura;
+# Pasa saber que rama estoy
 
-    create table ventas( 
-        ID_venta int auto_increment primary key,
-        nombre varchar(100),
-        fecha datetime,
-        total float);
-        
-    create table stock(
-        ID_producto int,
-        stock int,
-        foreign key (ID_producto) references productos(ID_producto));    
-        
-    create table movimineto_stock(
-        ID_producto int,
-        fecha datetime,
-        cantidad int,
-        foreign key (ID_producto) references productos(ID_producto));
-        
-    create table venta_producto(
-        ID_venta int,
-        ID_producto int,
-        cantidad int,
-        precio float,
-        foreign key(ID_venta) references ventas(ID_venta),
-        foreign key (ID_producto) references productos(ID_producto));
+git remote -v
+git branch
+git log --oneline -n 5
 
-    create table productos( 
-        ID_producto int auto_increment primary key,
-        codigo int,
-        nombre varchar (100),
-        precio float);
+# Guardar cambios
+git add archivo
+git commit -m "Mensaje breve"
+git push origin desarrolloCristian
 
-## ✍️ Autor
-Cristian Velázquez  
-Amante del backend, entusiasta de Python y creador de soluciones prácticas para el mundo real.
+# Fusionar al main
+git checkout main
+git merge desarrolloCristian
+git push origin main
 
+# Guardar temporalmente
+git stash
+git checkout main
+git stash pop
 
+# Descartar cambios (⚠️ cuidado)
+git restore README.md notas.txt
+git checkout main
+```
 
+---
 
 
 
