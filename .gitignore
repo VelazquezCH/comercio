@@ -1,0 +1,19 @@
+# Ignorar cachés de Python
+__pycache__/
+*.pyc
+
+# Configuración de editores
+.vscode/
+.idea/
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Archivos sensibles o de entorno
+.env
+
+# Archivos PDF generados
+*.pdf
+
+notas.txt
